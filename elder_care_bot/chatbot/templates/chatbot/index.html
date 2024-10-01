@@ -1,0 +1,22 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <title>Чат-бот по уходу за пожилыми</title>  
+</head>  
+<body>  
+    <h1>Чат-бот по уходу за пожилыми</h1>  
+    <div id="chat"></div>  
+    <input type="text" id="user-input" placeholder="Введите ваш вопрос...">  
+    <button onclick="sendMessage()">Отправить</button>  
+
+    <script>  
+        function sendMessage() {  
+            const input = document.getElementById('user-input').value;  
+            const chat = document.getElementById('chat');  
+            chat.innerHTML += `<div>Вы: ${input}</div>`;  
+            // Здесь добавьте логику для отправки сообщения на сервер и получения ответа  
+        }  
+    </script>  
+</body>  
+</html>
