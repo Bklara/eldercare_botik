@@ -1,22 +1,48 @@
 <!DOCTYPE html>  
-<html lang="en">  
+<html lang="ru">  
 <head>  
     <meta charset="UTF-8">  
     <title>Чат-бот по уходу за пожилыми</title>  
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  
 </head>  
 <body>  
     <h1>Чат-бот по уходу за пожилыми</h1>  
-    <div id="chat"></div>  
+    <div id="chat" style="height: 400px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px;"></div>  
     <input type="text" id="user-input" placeholder="Введите ваш вопрос...">  
     <button onclick="sendMessage()">Отправить</button>  
 
     <script>  
         function sendMessage() {  
-            const input = document.getElementById('user-input').value;  
+            const input = document.getElementById('user-input');  
+            const message = input.value;  
+            if (message.trim() === '') return;  
+
             const chat = document.getElementById('chat');  
-            chat.innerHTML += `<div>Вы: ${input}</div>`;  
-            // Здесь добавьте логику для отправки сообщения на сервер и получения ответа  
+            chat.innerHTML += `<div><strong>Вы:</strong> ${message}</div>`;  
+            input.value = '';  
+
+            $.ajax({  
+                url: '/api/chat/',  
+                method: 'POST',  
+                data: JSON.stringify({ message: message }),  
+                contentType: 'application/json',  
+                success: function(data) {  
+                    chat.innerHTML += `<div><strong>Бот:</strong> ${data.response}</div>`;  
+                    chat.scrollTop = chat.scrollHeight;  
+                },  
+                error: function() {  
+                    chat.innerHTML += `<div><strong>Бот:</strong> Извините, произошла ошибка. Попробуйте еще раз.</div>`;  
+                    chat.scrollTop = chat.scrollHeight;  
+                }  
+            });  
         }  
+
+        // Отправка сообщения при нажатии Enter  
+        document.getElementById('user-input').addEventListener('keypress', function(e) {  
+            if (e.key === 'Enter') {  
+                sendMessage();  
+            }  
+        });  
     </script>  
 </body>  
 </html>
